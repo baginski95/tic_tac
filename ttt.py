@@ -5,16 +5,17 @@ import sys
 
 
 def print_board(board):
+    INDENTATION = 64
     print(10*'\n')
-    print(64*' ' + "    1   2   3")
-    print(64*' ' + 3*" " + 11*'-')
-    print(64*' ' + 'A', *board[0], sep=" | ", end=" |\n")
-    print(64*' ' + "   ---+---+---")
-    print(64*' ' + 'B', *board[1], sep=" | ", end=" |\n")
-    print(64*' ' + "   ---+---+---")
-    print(64*' ' + 'C', *board[2], sep=" | ", end=" |\n")
-    print(64*' ' + 3*" " + 11*'-')
-    print(64*' ' + 15*'\n')
+    print(INDENTATION*' ' + "    1   2   3")
+    print(INDENTATION*' ' + 3*" " + 11*'-')
+    print(INDENTATION*' ' + 'A', *board[0], sep=" | ", end=" |\n")
+    print(INDENTATION*' ' + "   ---+---+---")
+    print(INDENTATION*' ' + 'B', *board[1], sep=" | ", end=" |\n")
+    print(INDENTATION*' ' + "   ---+---+---")
+    print(INDENTATION*' ' + 'C', *board[2], sep=" | ", end=" |\n")
+    print(INDENTATION*' ' + 3*" " + 11*'-')
+    print(INDENTATION*' ' + 15*'\n')
     return None
 
 
@@ -53,7 +54,8 @@ def get_move(board, player):  # This function allows check and get coordinates f
                 continue
         else:
             print(58 * ' ' + "You can't use this coordinates.")
-            print(48 * ' ' + "Next time try to use: A,B,C for rows and 1,2,3 for columns.")
+            print(
+                48 * ' ' + "Next time try to use: A,B,C for rows and 1,2,3 for columns.")
             continue
         correct = True
         position = (int(row), int(col))
@@ -202,10 +204,10 @@ def get_random_move_A1(board, moves):
                 elif 'X' in row_col[1] and 'X' in row_col[2] and ' ' in row_col[0]:
                     row = row_index
                     col = 0
-                    moves +=1
+                    moves += 1
                     position = (int(row), int(col))
                     return position, moves
-        if moves == 3 or moves == 4 :
+        if moves == 3 or moves == 4:
             if board[0][0] == 'X' and board[1][0] == 'X' and board[2][0] == ' ':
                 row = 2
                 col = 0
@@ -268,10 +270,10 @@ def get_random_move_A1(board, moves):
                 elif 'O' in row_col[1] and 'O' in row_col[2] and ' ' in row_col[0]:
                     row = row_index
                     col = 0
-                    moves +=1
+                    moves += 1
                     position = (int(row), int(col))
                     return position, moves
-        if moves == 3 or moves == 4 :
+        if moves == 3 or moves == 4:
             if board[0][0] == 'O' and board[1][0] == 'O' and board[2][0] == ' ':
                 row = 2
                 col = 0
@@ -317,7 +319,7 @@ def get_random_move_A1(board, moves):
                 col = 2
                 moves += 1
                 break
-        if moves == 3 or moves == 4 :
+        if moves == 3 or moves == 4:
             for row_index, row_col in enumerate(board, start=0):
                 if 'O' in row_col[0] and ' ' in row_col[1] and ' ' in row_col[2]:
                     row = row_index
@@ -431,7 +433,8 @@ def game():
                 pX_points_counter += 1
             if give_point_to_winner == 2:
                 pO_points_counter += 1
-            print(50*' ' + f'player_X points: {pX_points_counter}        player_O points: {pO_points_counter}')
+            print(
+                50*' ' + f'player_X points: {pX_points_counter}        player_O points: {pO_points_counter}')
             again = input('Would you like to play again? ')
 
 
