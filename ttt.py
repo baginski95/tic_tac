@@ -5,7 +5,7 @@ import sys
 
 
 def print_board(board):
-    print(10*'\n') # 10 newlines for nice UI
+    print(10*'\n')
     print(64*' ' + "    1   2   3")
     print(64*' ' + 3*" " + 11*'-')
     print(64*' ' + 'A', *board[0], sep=" | ", end=" |\n")
@@ -23,12 +23,12 @@ def init_board():
     return board
 
 
-def get_move(board, player):
+def get_move(board, player):  # This function allows check and get coordinates from user input
     if player == 1:
         player_name = 'Player_X'
     else:
-        player_name = 'Player_E
-
+        player_name = 'Player_O'
+    correct = False
     while not correct:
         print_board(board)
         move = input(56 * ' ' + f'{player_name} insert coordinates: ')
@@ -60,7 +60,7 @@ def get_move(board, player):
         return position
 
 
-def mark(board, player, position):
+def mark(board, player, position):  # This function overwrite board
     if player == 1:                 # by getting position from get_move()
         board[position[0]][position[1]] = 'X'
     if player == 2:
@@ -253,7 +253,8 @@ def get_random_move_A1(board, moves):
                 break
         if moves == 3 or moves == 4:
             for row_index, row_col in enumerate(board, start=0):
-             64         row = row_index
+                if 'O' in row_col[0] and 'O' in row_col[1] and ' ' in row_col[2]:
+                    row = row_index
                     col = 2
                     moves += 1
                     position = (int(row), int(col))
@@ -316,7 +317,7 @@ def get_random_move_A1(board, moves):
                 col = 2
                 moves += 1
                 break
-        if moves == 3 or moves == 4:
+        if moves == 3 or moves == 4 :
             for row_index, row_col in enumerate(board, start=0):
                 if 'O' in row_col[0] and ' ' in row_col[1] and ' ' in row_col[2]:
                     row = row_index
@@ -420,17 +421,24 @@ def game():
     again = 'y'
     pX_points_counter = 0
     pO_points_counter = 0
-    argument = '--pvp' if len(sys.argv) <= 1 else sys.argv[1]
+    argument = 'pvp' if len(sys.argv) <= 1 else sys.argv[1]
     while again in {'y', 'yes', 'tak', 'sure', 'YES', 'Yes', 'Y'}:
         if argument in {'--pve', '--single', '--AI', '--computer', 'pve', 'single', '-ai'}:
             give_point_to_winner = game_pve()
-        elif argument == '--pvp':
+            if give_point_to_winner == 1:
+                pX_points_counter += 1
+            if give_point_to_winner == 2:
+                pO_points_counter += 1
+            print(50*' ' + f'player_X points: {pX_points_counter}        player_O points: {pO_points_counter}')
+            again = input('Would you like to play again? ')
+        elif argument == 'pvp':
             give_point_to_winner = game_pvp()
-        if give_point_to_winner == 1:
-            pX_points_counter += 1
-        if give_point_to_winner == 2:
-            pO_points_counter += 1
-        print(50*' ' + f'player_X points: {pX_points_counter}        player_O points: {pO_points_counter}')
-        again = input('Would you like to play again? ')
+            if give_point_to_winner == 1:
+                pX_points_counter += 1
+            if give_point_to_winner == 2:
+                pO_points_counter += 1
+            print(50*' ' + f'player_X points: {pX_points_counter}        player_O points: {pO_points_counter}')
+            again = input('Would you like to play again? ')
+
 
 game()
