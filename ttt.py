@@ -76,20 +76,31 @@ def has_won(board, player):
     else:
         mark = 'O'
     for row in board:
-        if row[0] == mark and row[1] == mark and row[2] == mark:
+        mark_in_row = 0  # If mark_in_row == len(board[0]) in row then player wins
+        for field in row:
+            if field == mark:
+                mark_in_row += 1
+        if mark_in_row == len(board):
             return True
-    if board[0][0] == mark and board[1][1] == mark and board[2][2] == mark:
-        return True
-    if board[0][2] == mark and board[1][1] == mark and board[2][0] == mark:
-        return True
-    if board[0][0] == mark and board[1][0] == mark and board[2][0] == mark:
-        return True
-    if board[0][1] == mark and board[1][1] == mark and board[2][1] == mark:
-        return True
-    if board[0][2] == mark and board[1][2] == mark and board[2][2] == mark:
-        return True
-    else:
-        return False
+    for row in board:
+        across_mark = 0
+        if row[board.index(row)] == mark:
+            across_mark += 1
+        if across_mark == len(board):
+            return True
+    for row in board:
+        across_mark_reverse = 0
+        if row[len(board) - 1 - board.index(row)] == mark:
+            across_mark_reverse += 1
+        if across_mark_reverse == len(board):
+            return True
+    for column_index in range(0, len(board)):
+        full_column = 0
+        for row_index in range(0, len(board[0])):
+            if board[row_index][column_index] == mark:
+                full_column += 1
+            if full_column == len(board[0]):
+                return True
 
 
 def is_full(board):
@@ -421,8 +432,8 @@ def game_pve():
 
 def game():
     again = 'y'
-    pX_points_counter = 0
-    pO_points_counter = 0
+    pX_points_in_row = 0
+    pO_points_in_row = 0
     argument = 'pvp' if len(sys.argv) <= 1 else sys.argv[1]
     while again in {'y', 'yes', 'tak', 'sure', 'YES', 'Yes', 'Y'}:
         if argument in {'--pve', '--single', '--AI', '--computer', 'pve', 'single', '-ai'}:
@@ -430,11 +441,11 @@ def game():
         elif argument == 'pvp':
             give_point_to_winner = game_pvp()
             if give_point_to_winner == 1:
-                pX_points_counter += 1
+                pX_points_in_row += 1
             if give_point_to_winner == 2:
-                pO_points_counter += 1
+                pO_points_in_row += 1
             print(
-                50*' ' + f'player_X points: {pX_points_counter}        player_O points: {pO_points_counter}')
+                50*' ' + f'player_X points: {pX_points_in_row}        player_O points: {pO_points_in_row}')
             again = input('Would you like to play again? ')
 
 
