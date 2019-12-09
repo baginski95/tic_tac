@@ -425,12 +425,6 @@ def game():
     while again in {'y', 'yes', 'tak', 'sure', 'YES', 'Yes', 'Y'}:
         if argument in {'--pve', '--single', '--AI', '--computer', 'pve', 'single', '-ai'}:
             give_point_to_winner = game_pve()
-            if give_point_to_winner == 1:
-                pX_points_counter += 1
-            if give_point_to_winner == 2:
-                pO_points_counter += 1
-            print(50*' ' + f'player_X points: {pX_points_counter}        player_O points: {pO_points_counter}')
-            again = input('Would you like to play again? ')
         elif argument == 'pvp':
             give_point_to_winner = game_pvp()
             if give_point_to_winner == 1:
