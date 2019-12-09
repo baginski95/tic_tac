@@ -16,15 +16,19 @@ def print_board(board):
     print(64*' ' + 3*" " + 11*'-')
     print(64*' ' + 15*'\n')
     return None
+
+
 def init_board():
     board = [[" ", " ", " "], [" ", " ", " "], [" ", " ", " "]]
     return board
+
+
 def get_move(board, player):
     if player == 1:
         player_name = 'Player_X'
     else:
-        player_name = 'Player_O'
-    correct = False
+        player_name = 'Player_E
+
     while not correct:
         print_board(board)
         move = input(56 * ' ' + f'{player_name} insert coordinates: ')
@@ -54,12 +58,16 @@ def get_move(board, player):
         correct = True
         position = (int(row), int(col))
         return position
+
+
 def mark(board, player, position):
     if player == 1:                 # by getting position from get_move()
         board[position[0]][position[1]] = 'X'
     if player == 2:
         board[position[0]][position[1]] = 'O'
     return board
+
+
 def has_won(board, player):
     if player == 1:
         mark = 'X'
@@ -81,6 +89,7 @@ def has_won(board, player):
     else:
         return False
 
+
 def is_full(board):
     empty_fields = 0
     for row in board:
@@ -91,6 +100,8 @@ def is_full(board):
         return False
     else:
         return True
+
+
 def game_pvp():
     board = init_board()
     print_board(board)
@@ -124,6 +135,8 @@ def game_pvp():
         return 2
     if who_won == 3:
         return 3
+
+
 def print_result(who_won):
     if who_won == 1:
         print(69 * ' ' + 'X won!\n')
@@ -132,6 +145,8 @@ def print_result(who_won):
     if who_won == 3:
         print(67 * ' ' + "It's a tie!\n")
     return None
+
+
 def get_random_move_A1(board, moves):
     correct = False
     while not correct:
@@ -238,8 +253,7 @@ def get_random_move_A1(board, moves):
                 break
         if moves == 3 or moves == 4:
             for row_index, row_col in enumerate(board, start=0):
-                if 'O' in row_col[0] and 'O' in row_col[1] and ' ' in row_col[2]:
-                    row = row_index
+             64         row = row_index
                     col = 2
                     moves += 1
                     position = (int(row), int(col))
@@ -363,6 +377,8 @@ def get_random_move_A1(board, moves):
             correct = True
     position = (int(row), int(col))
     return position, moves
+
+
 def game_pve():
     board = init_board()
     print_board(board)
@@ -398,6 +414,8 @@ def game_pve():
         return 2
     if who_won == 3:
         return 3
+
+
 def game():
     again = 'y'
     pX_points_counter = 0
@@ -414,4 +432,5 @@ def game():
             pO_points_counter += 1
         print(50*' ' + f'player_X points: {pX_points_counter}        player_O points: {pO_points_counter}')
         again = input('Would you like to play again? ')
+
 game()
