@@ -115,44 +115,9 @@ def is_full(board):
         return True
 
 
-def game_pvp():
-    board = init_board()
-    print_board(board)
-    player_X, player_O = 1, 2
-    who_won = 0
-    end = False
-    while not end:
-        mark(board, player_X, get_move(board, player_X))
-        if has_won(board, player_X):
-            who_won = 1
-            end = True
-            break
-        if is_full(board):
-            who_won = 3
-            end = True
-            break
-        print_board(board)
-        mark(board, player_O, get_move(board, player_O))
-        if has_won(board, player_O):
-            who_won = 2
-            end = True
-        if is_full(board):
-            who_won = 3
-            end = True
-        print_board(board)
-    print_board(board)
-    print_result(who_won)
-    if who_won == 1:
-        return 1
-    if who_won == 2:
-        return 2
-    if who_won == 3:
-        return 3
-
-
 def print_result(who_won):
     if who_won == 1:
-        print(69 * ' ' + 'X won!\n')
+        print(69 * ' ' + 'X won!\n')  #69 and 67 numbers multiplay indentation 
     if who_won == 2:
         print(69 * ' ' + 'O won!\n')
     if who_won == 3:
@@ -393,6 +358,46 @@ def get_random_move_A1(board, moves):
     return position, moves
 
 
+def setting_and_checking_move(board, player):
+    mark(board, player, get_move(board, player))
+    if has_won(board, player):
+        who_won = player
+        end = True
+    elif is_full(board):
+        who_won = 3
+        end = True
+    else:
+        end = False
+        who_won = 0
+    print_board(board)
+    return end, who_won
+
+
+def playing_the_game(mode='pvp'):
+    board = init_board()
+    print_board(board)
+    player_X, player_O = 1, 2
+    if mode == 'pve':
+        moves = 1
+    who_won = 0
+    end = False
+    for iterate in range(0, (len(board)**2)):
+        end, who_won = setting_and_checking_move(board, player_X)
+        if end:
+            break
+        end, who_won = setting_and_checking_move(board, player_O)
+        if end:
+            break
+    print_board(board)
+    print_result(who_won)
+    if who_won == 1:
+        return 1
+    if who_won == 2:
+        return 2
+    if who_won == 3:
+        return 3
+
+
 def game_pve():
     board = init_board()
     print_board(board)
@@ -439,7 +444,7 @@ def game():
         if argument in {'--pve', '--single', '--AI', '--computer', 'pve', 'single', '-ai'}:
             give_point_to_winner = game_pve()
         elif argument == 'pvp':
-            give_point_to_winner = game_pvp()
+            give_point_to_winner = playing_the_game()
             if give_point_to_winner == 1:
                 pX_points_in_row += 1
             if give_point_to_winner == 2:
