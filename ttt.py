@@ -111,7 +111,9 @@ def is_full(board):
                 empty_fields += 1
     if empty_fields != 0:
         return False
-    else:get_move(boa
+    else:
+        return True
+
 
 def print_result(who_won):
     if who_won == 1:
