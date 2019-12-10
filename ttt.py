@@ -2,6 +2,7 @@
 
 import random
 import sys
+from math import ceil
 
 
 def print_board(board):
@@ -82,14 +83,14 @@ def has_won(board, player):
                 mark_in_row += 1
         if mark_in_row == len(board):
             return True
+    across_mark = 0
     for row in board:
-        across_mark = 0
         if row[board.index(row)] == mark:
             across_mark += 1
         if across_mark == len(board):
             return True
+    across_mark_reverse = 0
     for row in board:
-        across_mark_reverse = 0
         if row[len(board) - 1 - board.index(row)] == mark:
             across_mark_reverse += 1
         if across_mark_reverse == len(board):
@@ -381,7 +382,8 @@ def playing_the_game(mode='pvp'):
         moves = 1
     who_won = 0
     end = False
-    for iterate in range(0, (len(board)**2)):
+    upper_range = int(ceil(len(board)**2/2))
+    for iterate in range(0, upper_range):
         if mode == 'pve':
             position, moves = get_random_move_A1(board, moves)
             end, who_won = setting_and_checking_move(board, player_X, position)
