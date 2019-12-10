@@ -111,9 +111,7 @@ def is_full(board):
                 empty_fields += 1
     if empty_fields != 0:
         return False
-    else:
-        return True
-
+    else:get_move(boa
 
 def print_result(who_won):
     if who_won == 1:
@@ -358,8 +356,8 @@ def get_random_move_A1(board, moves):
     return position, moves
 
 
-def setting_and_checking_move(board, player):
-    mark(board, player, get_move(board, player))
+def setting_and_checking_move(board, player, position):
+    mark(board, player, position)
     if has_won(board, player):
         who_won = player
         end = True
@@ -382,10 +380,14 @@ def playing_the_game(mode='pvp'):
     who_won = 0
     end = False
     for iterate in range(0, (len(board)**2)):
-        end, who_won = setting_and_checking_move(board, player_X)
+        if mode == 'pve':
+            position, moves = get_random_move_A1(board, moves)
+            end, who_won = setting_and_checking_move(board, player_X, position)
+        else:
+            end, who_won = setting_and_checking_move(board, player_X, get_move(board, player_X))
         if end:
             break
-        end, who_won = setting_and_checking_move(board, player_O)
+        end, who_won = setting_and_checking_move(board, player_O, get_move(board, player_O))
         if end:
             break
     print_board(board)
@@ -398,43 +400,6 @@ def playing_the_game(mode='pvp'):
         return 3
 
 
-def game_pve():
-    board = init_board()
-    print_board(board)
-    player_X, player_O = 1, 2
-    who_won = 0
-    end = False
-    moves = 1
-    while not end:
-        position, moves = get_random_move_A1(board, moves)
-        mark(board, player_X, position)
-        if has_won(board, player_X):
-            who_won = 1
-            end = True
-            break
-        if is_full(board):
-            who_won = 3
-            end = True
-            break
-        print_board(board)
-        mark(board, player_O, get_move(board, player_O))
-        if has_won(board, player_O):
-            who_won = 2
-            end = True
-        if is_full(board):
-            who_won = 3
-            end = True
-        print_board(board)
-    print_board(board)
-    print_result(who_won)
-    if who_won == player_X:
-        return 1
-    if who_won == player_O:
-        return 2
-    if who_won == 3:
-        return 3
-
-
 def game():
     again = 'y'
     pX_points_in_row = 0
@@ -442,16 +407,15 @@ def game():
     argument = 'pvp' if len(sys.argv) <= 1 else sys.argv[1]
     while again in {'y', 'yes', 'tak', 'sure', 'YES', 'Yes', 'Y'}:
         if argument in {'--pve', '--single', '--AI', '--computer', 'pve', 'single', '-ai'}:
-            give_point_to_winner = game_pve()
+            give_point_to_winner = playing_the_game(mode='pve')
         elif argument == 'pvp':
             give_point_to_winner = playing_the_game()
             if give_point_to_winner == 1:
                 pX_points_in_row += 1
             if give_point_to_winner == 2:
                 pO_points_in_row += 1
-            print(
-                50*' ' + f'player_X points: {pX_points_in_row}        player_O points: {pO_points_in_row}')
-            again = input('Would you like to play again? ')
+        print(50*' ' + f'player_X points: {pX_points_in_row}        player_O points: {pO_points_in_row}')
+        again = input('Would you like to play again? ')
 
 
 game()
