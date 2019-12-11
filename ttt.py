@@ -1,31 +1,48 @@
-# Tic-Tac-Toe
+#  Tic-Tac-Toe
 
 import random
 import sys
+import os
 from math import ceil
 
 
-def print_board(board):
-    INDENTATION = 64
-    print(10*'\n')
-    print(INDENTATION*' ' + "    1   2   3")
-    print(INDENTATION*' ' + 3*" " + 11*'-')
-    print(INDENTATION*' ' + 'A', *board[0], sep=" | ", end=" |\n")
-    print(INDENTATION*' ' + "   ---+---+---")
-    print(INDENTATION*' ' + 'B', *board[1], sep=" | ", end=" |\n")
-    print(INDENTATION*' ' + "   ---+---+---")
-    print(INDENTATION*' ' + 'C', *board[2], sep=" | ", end=" |\n")
-    print(INDENTATION*' ' + 3*" " + 11*'-')
-    print(INDENTATION*' ' + 15*'\n')
-    return None
+def get_board_size():
+    incorrect_input = True
+    terminal_size = os.get_terminal_size()
+    terminal_lines = terminal_size.lines
+    while incorrect_input:
+        try:
+            board_size = (input("Insert how many rows and columns should have your board: "))
+            board_size = int(board_size)
+            if board_size <= 2 or board_size >= terminal_lines - 5:  #  Terminal size defines max board size
+                print(f"You can't create a board with {board_size} size")
+                continue
+            incorrect_input = False
+        except ValueError:
+            print(f"Invalid board size: {board_size} ")
+            continue
+    return board_size
 
 
-def init_board():
-    board = [[" ", " ", " "], [" ", " ", " "], [" ", " ", " "]]
+def initial_board(board_size):
+    board = []
+    for board_row in range(board_size):
+        board.append([])
+        for board_col in range(board_size):
+            board[board_row].append(' ')
     return board
 
 
-def get_move(board, player):  # This function allows check and get coordinates from user input
+def print_board(board):
+    print(len(board) * '---+')  # upper frame 
+    for row_index in range(len(board)):
+        print(' ', sep='', end='')
+        print(*board[row_index], sep=" | ", end=" |\n",)
+        print(len(board) * "---+")
+    return None
+
+
+def get_move(board, player):
     if player == 1:
         player_name = 'Player_X'
     else:
@@ -34,29 +51,24 @@ def get_move(board, player):  # This function allows check and get coordinates f
     while not correct:
         print_board(board)
         move = input(56 * ' ' + f'{player_name} insert coordinates: ')
-        try:
-            row = move[0].lower()
-            col = move[1]
-        except IndexError:
-            row = ''
-            col = ''
         if move in {'quit', 'q', 'exit', 'wyjście'}:
             quit()
-        if row in {'a', 'b', 'c'} and col in {'1', '2', '3'} and len(move) == 2:
-            col = int(col) - 1    # It's needed to convert user input
-            if row == 'a':        # to numbers of board indexes
-                row = 0
-            elif row == 'b':
-                row = 1
-            elif row == 'c':
-                row = 2
+        try:
+            move = move.split(sep=' ')
+            row = int(move[0])
+            col = int(move[1])
+        except ValueError:
+            row = 0
+            col = 0
+        if 0 < row <= len(board) and 0 < col <= len(board) and len(move) == 2:
+            col -= 1  # It's needed to convert user input
+            row -= 1  # to numbers of board indexes
             if board[row][col] == 'X' or board[row][col] == 'O':
                 print('\n' + 63 * ' ' + 'coordinates were used.')
                 continue
         else:
             print(58 * ' ' + "You can't use this coordinates.")
-            print(
-                48 * ' ' + "Next time try to use: A,B,C for rows and 1,2,3 for columns.")
+            print(48 * ' ' + f"Next time try to use numbers from 1 to {len(board)} for rows and columns.")
             continue
         correct = True
         position = (int(row), int(col))
@@ -370,16 +382,16 @@ def setting_and_checking_move(board, player, position):
     else:
         end = False
         who_won = 0
-    print_board(board)
     return end, who_won
 
 
 def playing_the_game(mode='pvp'):
-    board = init_board()
-    print_board(board)
-    player_X, player_O = 1, 2
+    if mode == 'pvp':
+        board_size = get_board_size()
     if mode == 'pve':
         moves = 1
+    board = initial_board(board_size)
+    player_X, player_O = 1, 2
     who_won = 0
     end = False
     upper_range = int(ceil(len(board)**2/2))
