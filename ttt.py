@@ -14,7 +14,7 @@ def get_board_size():
         try:
             board_size = (input("Insert how many rows and columns should have your board: "))
             board_size = int(board_size)
-            if board_size <= 2 or board_size >= terminal_lines - 5:  #  Terminal size defines max board size
+            if board_size <= 2 or board_size > ((terminal_lines - 4) / 2):  # Terminal size defines max board size
                 print(f"You can't create a board with {board_size} size")
                 continue
             incorrect_input = False
