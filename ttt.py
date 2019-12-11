@@ -24,7 +24,7 @@ def get_board_size():
     return board_size
 
 
-def initial_board(board_size):
+def initial_board(board_size=3):
     board = []
     for board_row in range(board_size):
         board.append([])
@@ -33,13 +33,26 @@ def initial_board(board_size):
     return board
 
 
-def print_board(board):
-    print(len(board) * '---+')  # upper frame 
-    for row_index in range(len(board)):
+def printing_indent(board):
+    terminal_size = os.get_terminal_size()
+    terminal_width = terminal_size.columns
+    for space in range(int((terminal_width - 4 * len(board))/2)):
         print(' ', sep='', end='')
-        print(*board[row_index], sep=" | ", end=" |\n",)
+
+
+def print_board(board):
+    terminal_size = os.get_terminal_size()
+    terminal_lines = terminal_size.lines
+    amount_of_new_lines = terminal_lines - 4 - 2 * len(board)
+    print('\n' * amount_of_new_lines)
+    printing_indent(board)
+    print(len(board) * '---+')  # upper frame 
+    for row in board:
+        printing_indent(board)
+        print('|', sep='', end='')
+        print(*row, sep=" | ", end=" |\n",)
+        printing_indent(board)
         print(len(board) * "---+")
-    return None
 
 
 def get_move(board, player):
@@ -50,25 +63,29 @@ def get_move(board, player):
     correct = False
     while not correct:
         print_board(board)
-        move = input(56 * ' ' + f'{player_name} insert coordinates: ')
+        printing_indent(board)
+        move = input(f'{player_name} insert coordinates: ')
         if move in {'quit', 'q', 'exit', 'wyjście'}:
             quit()
         try:
             move = move.split(sep=' ')
             row = int(move[0])
             col = int(move[1])
-        except ValueError:
+        except (ValueError, IndexError):
             row = 0
             col = 0
         if 0 < row <= len(board) and 0 < col <= len(board) and len(move) == 2:
             col -= 1  # It's needed to convert user input
             row -= 1  # to numbers of board indexes
             if board[row][col] == 'X' or board[row][col] == 'O':
-                print('\n' + 63 * ' ' + 'coordinates were used.')
+                printing_indent()
+                print('coordinates were used.')
                 continue
         else:
-            print(58 * ' ' + "You can't use this coordinates.")
-            print(48 * ' ' + f"Next time try to use numbers from 1 to {len(board)} for rows and columns.")
+            printing_indent(board)
+            print("You can't use this coordinates.")
+            printing_indent(board)
+            print(f"Next time try to use numbers from 1 to {len(board)} for rows and columns.")
             continue
         correct = True
         position = (int(row), int(col))
@@ -390,6 +407,7 @@ def playing_the_game(mode='pvp'):
         board_size = get_board_size()
     if mode == 'pve':
         moves = 1
+        board_size = 3  # AI can play just with 3x3 board
     board = initial_board(board_size)
     player_X, player_O = 1, 2
     who_won = 0
@@ -426,10 +444,10 @@ def game():
             give_point_to_winner = playing_the_game(mode='pve')
         elif argument == 'pvp':
             give_point_to_winner = playing_the_game()
-            if give_point_to_winner == 1:
-                pX_points_in_row += 1
-            if give_point_to_winner == 2:
-                pO_points_in_row += 1
+        if give_point_to_winner == 1:
+            pX_points_in_row += 1
+        if give_point_to_winner == 2:
+            pO_points_in_row += 1
         print(50*' ' + f'player_X points: {pX_points_in_row}        player_O points: {pO_points_in_row}')
         again = input('Would you like to play again? ')
 
