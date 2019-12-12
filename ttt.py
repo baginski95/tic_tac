@@ -132,27 +132,43 @@ def has_won(board, player):
         for field in row:
             if field == mark:
                 mark_in_row += 1
-        if mark_in_row == len(board):
-            return True
+            if len(board) <= 4:
+                if mark_in_row == len(board):
+                    return True
+            else:
+                if mark_in_row == 5:
+                    return True
     across_mark = 0
     for row in board:
         if row[board.index(row)] == mark:
             across_mark += 1
-        if across_mark == len(board):
-            return True
+        if len(board) <= 4:
+            if across_mark == len(board):
+                return True
+        else:
+            if across_mark == 5:
+                return True
     across_mark_reverse = 0
     for row in board:
         if row[len(board) - 1 - board.index(row)] == mark:
             across_mark_reverse += 1
-        if across_mark_reverse == len(board):
-            return True
+        if len(board) <= 4:
+            if across_mark_reverse == len(board):
+                return True
+        else:
+            if across_mark_reverse == 5:
+                return True
     for column_index in range(0, len(board)):
         full_column = 0
         for row_index in range(0, len(board[0])):
             if board[row_index][column_index] == mark:
                 full_column += 1
-            if full_column == len(board[0]):
-                return True
+            if len(board) <= 4:
+                if full_column == len(board[0]):
+                    return True
+            else:
+                if full_column == 5:
+                    return True
 
 
 def is_full(board):
@@ -191,14 +207,14 @@ def setting_and_checking_move(board, player, position):
     return end, who_won
 
 
-def playing_the_game(mode='pvp'):
+def playing_the_game(first_move, second_move, mode='pvp'):
     if mode == 'pvp':
         board_size = get_board_size()
     if mode == 'pve':
-        moves = 1
+        moves = 1  # AI needs to know which turn actually is
         board_size = 3  # AI can play just with 3x3 board
     board = initial_board(board_size)
-    player_X, player_O = 1, 2
+    player_X, player_O = first_move, second_move
     who_won = 0
     end = False
     upper_range = int(ceil(len(board)**2/2))
@@ -229,12 +245,14 @@ def game():
     again = 'y'
     pX_points_in_row = 0
     pO_points_in_row = 0
+    first_move, second_move = 1, 2
     argument = 'pvp' if len(sys.argv) <= 1 else sys.argv[1]
     while again in {'y', 'yes', 'tak', 'sure', 'YES', 'Yes', 'Y'}:
         if argument in {'--pve', '--single', '--AI', '--computer', 'pve', 'single', '-ai'}:
-            give_point_to_winner = playing_the_game(mode='pve')
+            give_point_to_winner = playing_the_game(first_move, second_move, mode='pve')
         elif argument == 'pvp':
-            give_point_to_winner = playing_the_game()
+            give_point_to_winner = playing_the_game(first_move, second_move)
+            first_move, second_move = 2, 1
         if give_point_to_winner == 1:
             pX_points_in_row += 1
         if give_point_to_winner == 2:
