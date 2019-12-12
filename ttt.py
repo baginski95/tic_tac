@@ -12,9 +12,11 @@ def get_board_size():
     terminal_lines = terminal_size.lines
     while incorrect_input:
         try:
-            board_size = (input("Insert how many rows and columns should have your board: "))
+            board_size = (
+                input("Insert how many rows and columns should have your board: "))
             board_size = int(board_size)
-            if board_size <= 2 or board_size > ((terminal_lines - 4) / 2):  # Terminal size defines max board size
+            # Terminal size defines max board size
+            if board_size <= 2 or board_size > ((terminal_lines - 4) / 2):
                 print(f"You can't create a board with {board_size} size")
                 continue
             incorrect_input = False
@@ -36,23 +38,41 @@ def initial_board(board_size=3):
 def printing_indent(board):
     terminal_size = os.get_terminal_size()
     terminal_width = terminal_size.columns
-    for space in range(int((terminal_width - 4 * len(board))/2)):
+    for space in range(int((terminal_width - 4 * len(board)+4)/2)):
         print(' ', sep='', end='')
 
 
 def print_board(board):
     terminal_size = os.get_terminal_size()
     terminal_lines = terminal_size.lines
-    amount_of_new_lines = terminal_lines - 4 - 2 * len(board)
+    amount_of_new_lines = terminal_lines - 5 - 2 * len(board)
     print('\n' * amount_of_new_lines)
     printing_indent(board)
-    print(len(board) * '---+')  # upper frame 
-    for row in board:
+    columns_description_list = []
+    for number in range(len(board)):
+        if number < 10:
+            number = "  " + str(number+1)
+            columns_description_list.append(number)
+        elif number == 1:
+            number = str(number+1)
+            columns_description_list.append(number)
+        elif number > 9:
+            number = " " + str(number+1)
+            columns_description_list.append(number)
+    columns_description = " ".join(columns_description_list)
+    print(columns_description)
+    printing_indent(board)
+    print("  " + len(board) * '---+')  # upper frame
+    for index, row in enumerate(board):
         printing_indent(board)
+        if index <= 8:
+            print(" " + str(index+1), sep='', end='')
+        elif index >= 9:
+            print(index+1, sep='', end='')
         print('|', sep='', end='')
         print(*row, sep=" | ", end=" |\n",)
         printing_indent(board)
-        print(len(board) * "---+")
+        print("  " + len(board) * "---+")
 
 
 def get_move(board, player):
@@ -85,7 +105,8 @@ def get_move(board, player):
             printing_indent(board)
             print("You can't use this coordinates.")
             printing_indent(board)
-            print(f"Next time try to use numbers from 1 to {len(board)} for rows and columns.")
+            print(
+                f"Next time try to use numbers from 1 to {len(board)} for rows and columns.")
             continue
         correct = True
         position = (int(row), int(col))
@@ -106,7 +127,8 @@ def has_won(board, player):
     else:
         mark = 'O'
     for row in board:
-        mark_in_row = 0  # If mark_in_row == len(board[0]) in row then player wins
+        # If mark_in_row == len(board[0]) in row then player wins
+        mark_in_row = 0
         for field in row:
             if field == mark:
                 mark_in_row += 1
@@ -147,7 +169,7 @@ def is_full(board):
 
 def print_result(who_won):
     if who_won == 1:
-        print(69 * ' ' + 'X won!\n')  #69 and 67 numbers multiplay indentation 
+        print(69 * ' ' + 'X won!\n')  # 69 and 67 numbers multiplay indentation
     if who_won == 2:
         print(69 * ' ' + 'O won!\n')
     if who_won == 3:
@@ -185,10 +207,12 @@ def playing_the_game(mode='pvp'):
             position, moves = get_random_move_A1(board, moves)
             end, who_won = setting_and_checking_move(board, player_X, position)
         else:
-            end, who_won = setting_and_checking_move(board, player_X, get_move(board, player_X))
+            end, who_won = setting_and_checking_move(
+                board, player_X, get_move(board, player_X))
         if end:
             break
-        end, who_won = setting_and_checking_move(board, player_O, get_move(board, player_O))
+        end, who_won = setting_and_checking_move(
+            board, player_O, get_move(board, player_O))
         if end:
             break
     print_board(board)
@@ -215,7 +239,8 @@ def game():
             pX_points_in_row += 1
         if give_point_to_winner == 2:
             pO_points_in_row += 1
-        print(50*' ' + f'player_X points: {pX_points_in_row}        player_O points: {pO_points_in_row}')
+        print(
+            50*' ' + f'player_X points: {pX_points_in_row}        player_O points: {pO_points_in_row}')
         again = input('Would you like to play again? ')
 
 
