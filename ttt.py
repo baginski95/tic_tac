@@ -78,7 +78,7 @@ def get_move(board, player):
             col -= 1  # It's needed to convert user input
             row -= 1  # to numbers of board indexes
             if board[row][col] == 'X' or board[row][col] == 'O':
-                printing_indent()
+                printing_indent(board)
                 print('coordinates were used.')
                 continue
         else:
