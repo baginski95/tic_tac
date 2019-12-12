@@ -110,27 +110,43 @@ def has_won(board, player):
         for field in row:
             if field == mark:
                 mark_in_row += 1
-        if mark_in_row == len(board):
-            return True
+            if len(board) <= 4:
+                if mark_in_row == len(board):
+                    return True
+            else:
+                if mark_in_row == 5:
+                    return True
     across_mark = 0
     for row in board:
         if row[board.index(row)] == mark:
             across_mark += 1
-        if across_mark == len(board):
-            return True
+        if len(board) <= 4:
+            if across_mark == len(board):
+                return True
+        else:
+            if across_mark == 5:
+                return True
     across_mark_reverse = 0
     for row in board:
         if row[len(board) - 1 - board.index(row)] == mark:
             across_mark_reverse += 1
-        if across_mark_reverse == len(board):
-            return True
+        if len(board) <= 4:
+            if across_mark_reverse == len(board):
+                return True
+        else:
+            if across_mark_reverse == 5:
+                return True
     for column_index in range(0, len(board)):
         full_column = 0
         for row_index in range(0, len(board[0])):
             if board[row_index][column_index] == mark:
                 full_column += 1
-            if full_column == len(board[0]):
-                return True
+            if len(board) <= 4:
+                if full_column == len(board[0]):
+                    return True
+            else:
+                if full_column == 5:
+                    return True
 
 
 def is_full(board):
