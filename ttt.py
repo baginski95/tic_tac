@@ -169,14 +169,14 @@ def setting_and_checking_move(board, player, position):
     return end, who_won
 
 
-def playing_the_game(mode='pvp'):
+def playing_the_game(first_move, second_move, mode='pvp'):
     if mode == 'pvp':
         board_size = get_board_size()
     if mode == 'pve':
-        moves = 1
+        moves = 1  # AI needs to know which turn actually is
         board_size = 3  # AI can play just with 3x3 board
     board = initial_board(board_size)
-    player_X, player_O = 1, 2
+    player_X, player_O = first_move, second_move
     who_won = 0
     end = False
     upper_range = int(ceil(len(board)**2/2))
@@ -205,12 +205,14 @@ def game():
     again = 'y'
     pX_points_in_row = 0
     pO_points_in_row = 0
+    first_move, second_move = 1, 2
     argument = 'pvp' if len(sys.argv) <= 1 else sys.argv[1]
     while again in {'y', 'yes', 'tak', 'sure', 'YES', 'Yes', 'Y'}:
         if argument in {'--pve', '--single', '--AI', '--computer', 'pve', 'single', '-ai'}:
-            give_point_to_winner = playing_the_game(mode='pve')
+            give_point_to_winner = playing_the_game(first_move, second_move, mode='pve')
         elif argument == 'pvp':
-            give_point_to_winner = playing_the_game()
+            give_point_to_winner = playing_the_game(first_move, second_move)
+            first_move, second_move = 2, 1
         if give_point_to_winner == 1:
             pX_points_in_row += 1
         if give_point_to_winner == 2:
