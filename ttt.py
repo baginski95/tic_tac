@@ -42,6 +42,13 @@ def printing_indent(board):
         print(' ', sep='', end='')
 
 
+def printing_indent_for_words(words):
+    terminal_size = os.get_terminal_size()
+    terminal_width = terminal_size.columns
+    for space in range(int((terminal_width - len(words))/2)):
+        print(' ', sep='', end='')
+
+
 def print_board(board):
     terminal_size = os.get_terminal_size()
     terminal_lines = terminal_size.lines
@@ -83,7 +90,7 @@ def get_move(board, player):
     correct = False
     while not correct:
         print_board(board)
-        printing_indent(board)
+        printing_indent_for_words('player_name insert coordinates: ')
         move = input(f'{player_name} insert coordinates: ')
         if move in {'quit', 'q', 'exit', 'wyjście'}:
             quit()
@@ -98,13 +105,13 @@ def get_move(board, player):
             col -= 1  # It's needed to convert user input
             row -= 1  # to numbers of board indexes
             if board[row][col] == 'X' or board[row][col] == 'O':
-                printing_indent(board)
+                printing_indent_for_words('coordinates were used.')
                 print('coordinates were used.')
                 continue
         else:
-            printing_indent(board)
+            printing_indent_for_words("You can't use this coordinates.")
             print("You can't use this coordinates.")
-            printing_indent(board)
+            printing_indent_for_words('Next time try to use numbers from 1 to {len(board)} for rows and columns.')
             print(
                 f"Next time try to use numbers from 1 to {len(board)} for rows and columns.")
             continue
@@ -193,11 +200,14 @@ def is_full(board):
 
 def print_result(who_won):
     if who_won == 1:
-        print(69 * ' ' + 'X won!\n')  # 69 and 67 numbers multiplay indentation
+        printing_indent_for_words('X won!\n')
+        print('X won!\n')  # 69 and 67 numbers multiplay indentation
     if who_won == 2:
-        print(69 * ' ' + 'O won!\n')
+        printing_indent_for_words('O won!\n')
+        print('O won!\n')
     if who_won == 3:
-        print(67 * ' ' + "It's a tie!\n")
+        printing_indent_for_words("It's a tie!\n")
+        print("It's a tie!\n")
     return None
 
 
@@ -265,8 +275,8 @@ def game():
             pX_points_in_row += 1
         if give_point_to_winner == 2:
             pO_points_in_row += 1
-        print(
-            50*' ' + f'player_X points: {pX_points_in_row}        player_O points: {pO_points_in_row}')
+        printing_indent_for_words('player_X points:         player_O points:  ')
+        print(f'player_X points: {pX_points_in_row}        player_O points: {pO_points_in_row}')
         again = input('Would you like to play again? ')
 
 
