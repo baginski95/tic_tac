@@ -5,6 +5,7 @@ import os
 from math import ceil
 from ai_logic import get_random_move_A1
 
+
 def get_board_size():
     incorrect_input = True
     terminal_size = os.get_terminal_size()
@@ -111,12 +112,14 @@ def get_move(board, player):
         position = (int(row), int(col))
         return position
 
-def mark(board, player, position):  # This function overwrite board
-    if player == 1:                 # by getting position from get_move()
+
+def mark(board, player, position):
+    if player == 1:
         board[position[0]][position[1]] = 'X'
     if player == 2:
         board[position[0]][position[1]] = 'O'
     return board
+
 
 def has_won(board, player):
     if player == 1:
@@ -174,6 +177,8 @@ def has_won(board, player):
             else:
                 if full_column == 5:
                     return True
+
+
 def is_full(board):
     empty_fields = 0
     for row in board:
@@ -184,6 +189,8 @@ def is_full(board):
         return False
     else:
         return True
+
+
 def print_result(who_won):
     if who_won == 1:
         print(69 * ' ' + 'X won!\n')  # 69 and 67 numbers multiplay indentation
@@ -192,6 +199,8 @@ def print_result(who_won):
     if who_won == 3:
         print(67 * ' ' + "It's a tie!\n")
     return None
+
+
 def setting_and_checking_move(board, player, position):
     mark(board, player, position)
     if has_won(board, player):
@@ -204,6 +213,8 @@ def setting_and_checking_move(board, player, position):
         end = False
         who_won = 0
     return end, who_won
+
+
 def playing_the_game(first_move, second_move, mode='pvp'):
     if mode == 'pvp':
         board_size = get_board_size()
@@ -236,6 +247,8 @@ def playing_the_game(first_move, second_move, mode='pvp'):
         return 2
     if who_won == 3:
         return 3
+
+
 def game():
     again = 'y'
     pX_points_in_row = 0
